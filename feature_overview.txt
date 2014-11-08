@@ -1,0 +1,65 @@
+Feature: Player1 starts the game
+	- welcome
+	- instructions
+
+Feature: Player1 configures game of poker (GameConfig)
+	Feature: Player1 chooses number of players (maximum 6)
+	Feature: Player1 chooses betting structure- minimum buy-in, maximum buy-in
+			- cost to play, with maximum permitted 
+			- exchanged for poker chips
+	Feature: Player1 chooses minimum bet amount (big blind). Small blind is 1/2 of big blind
+
+Feature: Game is played until there are no more players
+
+Feature: PokerRound 
+	Feature: Each Round has a pot, reveal hand to all players, seats at the table, discard pile
+
+Feature: Each player has Available Chips, Ability to Participate in Round of poker, which includes a Hand of Cards, Betting, Position on the table, Discard, Show Hand to the Table, Leave the Table
+	
+Feature: Dealer deals a hand from the deck to each player to start a Round
+	dealer has only one Deck
+	each round only has one deck
+	dealer shuffles cards
+	dealer deals hand to each player at the Table
+
+Feature: Position on the Table
+	bettor: dealer button - 
+		if 1st Round, player1 gets dealer button by default
+		else Dealer button rotates clockwise to each player
+	big blind - 
+		if more than 2 players 
+				immediately left of the small blind
+		elsif only 2 players
+				player without the dealer button
+	small blind - 
+		if more than 2 players 
+			immediately left of the dealer 
+		else if only 2 players
+			player with the dealer button	
+	first bettor - first player left of big blind
+	second bettor - player after first
+	third bettor - 
+	fourth bettor - dealor button if 6 at the table
+	
+
+Feature: Round of betting (Each player makes a move)
+	check - no chips owed to the pot
+	raise - adds at least minimum bet amount to the pot
+	call - meets the bid amount without 
+	fold - does not meet the bid, discards hands without revealing, removed from the round
+
+Feature: Each player remaining in the Round can discard 0-3 cards
+
+Feature: Round of betting
+
+Feature: Show cards
+	- Best hand wins
+		
+Feature: Table pot is added to the Player winners chips
+
+Feature: Player game over
+	- player can leave table at any time, forfeiting any money given to the Table
+	- player can become Observer if no $
+
+	
+	
