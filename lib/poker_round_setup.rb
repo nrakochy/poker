@@ -50,19 +50,12 @@ class PokerRoundSetup
   end
   
   def assign_table_position_to_players players_in_the_round
-    players_in_the_round.each do |player| 
-      if player.position_at_the_table == players_in_the_round.length 
-        player.position_at_the_table = 1
-      else 
-        player.position_at_the_table += 1
-      end
-    end
-    players_in_the_round
+    players_in_the_round.each{|player| player.change_position_at_the_table(players_in_the_round.count)}
   end
 
   def get_ante_from_big_and_small_blind players
-    players.each do |player| 
-      blind =  @table_positions[player.position_at_the_table] 
+    players.each do |player|
+      blind =  @table_positions[player.return_position_at_the_table]
       player.pay_blind(blind)
     end
     players

@@ -1,5 +1,5 @@
 class Game
-  
+
   def setup_round big_blind, players
     setup = PokerRoundSetup.new(big_blind, players)
     seated_players = setup.assign_table_position_to_players(players)
@@ -9,7 +9,7 @@ class Game
     setup
   end
 
-  def play_round setup, dealer, full_deck
+  def play_round setup, dealer
     poker_round = PokerRound.new(setup.table_positions, setup.order_of_play, setup.opening_pot, setup.players_in_the_round )
     #ADD ROUND LOGIC
   end
@@ -18,6 +18,5 @@ class Game
     setup = setup_round(big_blind, players_in_the_round)
     play_round(setup)
   end
-    
 
 end

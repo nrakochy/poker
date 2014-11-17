@@ -1,6 +1,7 @@
 require_relative '../lib/poker_round'
 require_relative '../lib/player'
 require_relative '../lib/poker_round_setup'
+require_relative '../lib/dealer'
 
 describe PokerRound do
   player1 = Player.new(100, 0)
@@ -8,7 +9,9 @@ describe PokerRound do
   player3 = Player.new(100, 2)
   player4 = Player.new(100, 3)
   setup = PokerRoundSetup.new(10.0, [player1, player2, player3, player4])
-  let(:poker_round) { PokerRound.new(setup) }
+  dealer = Dealer.new
+  let(:poker_round_with_betting) { PokerRound.new(setup.players_in_the_round, dealer) }
+  let(:poker_round) { PokerRound.new([player1, player2, player3, player4], dealer)}
 
   describe '#add_current_bet_to_the_pot' do
     it 'raises the amount of the pot by amount bet' do
@@ -16,6 +19,15 @@ describe PokerRound do
       expect(poker_round.pot).to eq( 25 )
     end
   end
+
+  describe '#deal_hand_of_cards' do
+    it 'reduces the Dealers deck by number of cards dealt' do
+      poker_round.deal_hand_of_cards
+      expect(poker_round.dealer.deck.count).to eq(22)
+    end
+  end
+
+
 
 
 

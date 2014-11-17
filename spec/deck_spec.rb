@@ -7,15 +7,18 @@ describe Deck do
   describe '#make_deck_of_cards' do
 
     it 'creates a deck of card Objects that is 52 cards long' do
-      expect(deck.full_deck.length).to eq(52)
+      deck.make_deck_of_cards
+      expect(deck.full_deck.count).to eq(52)
     end
 
-    it 'returns an array' do
-      expect(deck.full_deck.class).to eq(Array)
+    it 'returns a Hash' do
+      deck.make_deck_of_cards
+      expect(deck.full_deck.class).to eq(Hash)
     end
 
     it 'creates Card Objects' do
-      expect(deck.full_deck.first.class).to be(Card)
+      deck.make_deck_of_cards
+      expect(deck.full_deck[1].class).to be(Card)
     end
 
   end
