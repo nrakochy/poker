@@ -1,32 +1,30 @@
 require_relative '../lib/player'
 require_relative '../lib/deck'
-require 'pry'
+
 describe Player do
   let(:player){ Player.new(100, 1, @hand_of_cards) }
 
   before :each do
-    @deck = Deck.new.make_deck_of_cards
-    @hand_of_cards = {1 => @deck[1], 2 => @deck[2], 3 => @deck[3], 4 => @deck[4], 5=> @deck[5] }
+    deck = Deck.new
+    @hand_of_cards = [
+      deck.find_card_in_deck("A", "Hearts"), deck.find_card_in_deck("A", "Spades"),
+      deck.find_card_in_deck("A", "Diamonds"), deck.find_card_in_deck("A", "Clubs"),
+      deck.find_card_in_deck("2", "Spades")
+    ]
   end
 
   describe '#discard' do
     it 'removes a card and returns the remaining cards in the poker hand' do
-      expect(player.discard(5)).to eq(@deck[5])
+      clubs2 = @hand_of_cards[4]
+      expect(player.discard(5)).to eq(clubs2)
     end
   end
 
   describe '#get_card_from_dealer' do
-    it 'adds a card to the hand_of_cards and assigns it a number in the hand_of_cards hash' do
-      card = @deck[6]
-      player.get_card_from_dealer(card)
-      expect(player.hand_of_cards).to eq({ 1 => @deck[1], 2 => @deck[2], 3 => @deck[3], 4 => @deck[4], 5=> @deck[5], 6=> @deck[6] })
-    end
-
-    it 'assigns the the number 1 to the first card added to the hand_of_cards hash' do
-      new_player = Player.new(100, 1)
-      card1 = 'JS'
-      new_player.get_card_from_dealer(card1)
-      expect(new_player.hand_of_cards).to eq( { 1 => 'JS'} )
+    it 'adds a card to the players hand of cards' do
+      clubs3 = Deck.new.find_card_in_deck("3", "Clubs")
+      player.get_card_from_dealer(clubs3)
+      expect(player.hand_of_cards.last).to eq(clubs3)
     end
   end
 
@@ -103,7 +101,7 @@ describe Player do
 
   describe '#reveal_hand' do
     it 'returns the hand of cards' do
-      expect(player.reveal_hand).to eq({ 1 => @deck[1], 2 => @deck[2], 3 => @deck[3], 4 => @deck[4], 5=> @deck[5] })
+      expect(player.reveal_hand).to eq(@hand_of_cards)
     end
   end
 

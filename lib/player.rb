@@ -1,4 +1,3 @@
-require 'pry'
 require_relative 'poker_rules'
 
 class Player
@@ -9,11 +8,11 @@ class Player
     @hand_of_cards = hand_of_cards
     @position_at_the_table = position_at_the_table
     @already_placed_bet = 0
-    @poker_hand_value = rules.determine_value_of_hand(@hand_of_cards.values)
+    #@poker_hand_value = rules.determine_value_of_hand(@hand_of_cards.values)
   end
 
   def discard card_num
-    @hand_of_cards.delete(card_num)
+    @hand_of_cards.delete_at(card_num-1)
   end
 
   def change_position_at_the_table num_at_the_table
@@ -25,7 +24,7 @@ class Player
   end
 
   def get_card_from_dealer(card)
-    @hand_of_cards[@hand_of_cards.count + 1] =  card
+    @hand_of_cards << card
   end
 
   def reveal_hand

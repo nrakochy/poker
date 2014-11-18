@@ -51,8 +51,8 @@ class PokerRules
   end
 
   def pair? poker_hand
-     poker_hash = count_face_value(poker_hand)
-     poker_hash.has_value?(2) && !two_pair?(poker_hand)
+    poker_hash = count_face_value(poker_hand)
+    poker_hash.has_value?(2) && !two_pair?(poker_hand)
   end
 
   def three_of_kind? poker_hand
@@ -118,7 +118,7 @@ class PokerRules
     face_cards = ['J', 'Q', 'K', 'A']
     deck_ranks = ((2..10).to_a.map{|num| num.to_s}) + face_cards
     included = []
-    face_cards.each do |face_card| 
+    face_cards.each do |face_card|
       if hand_ranks.include?(face_card)
       included << face_card
       hand_ranks.delete(face_card)
@@ -128,7 +128,7 @@ class PokerRules
     lowest_card = hand_ranks.first
     starting_point = deck_ranks.index(lowest_card)
     straight = deck_ranks[starting_point, 5]
-    hand_ranks == straight 
+    hand_ranks == straight
   end
 
   private
@@ -145,42 +145,4 @@ class PokerRules
     poker_hash
   end
 end
-=begin
-  def straight? poker_hand, full_deck
-    hand_arr = []
-    poker_hand.each{|card| hand_arr.push(card.rank)}
-    hand_arr.sort
-    consecutive_five_aces_high?(hand_arr) && unique_five?(hand_arr) || consecutive_five_aces_low?(hand_arr) && unique_five?(hand_arr)
-  end
-  
-  def unique_five? hand_ranks
-    hand_ranks.uniq.length >= 5
-  end
 
-  def consecutive_five_aces_low? poker_hand, full_deck
-    deck_numbers = ((2..10).to_a.map{|num| num.to_s}) 
-    deck_numbers = deck_numbers.unshift('A')
-    hand_ranks = []
-    poker_hand.each{|card| poker_hand.delete(card).unshift(card) if card.rank.include?('A')}
-    starting_point = deck_numbers.index(poker_hand.first.rank)
-    five_in_a_row = deck_numbers[starting_point, 5] 
-    hand_ranks == five_in_a_row  
-  end
-
-  def consecutive_five_aces_high? hand_ranks
-    face_cards = ['J', 'Q', 'K', 'A']
-    deck_ranks = ((2..10).to_a.map{|num| num.to_s}) + face_cards
-    included = []
-    face_cards.each do |face_card| 
-      if hand_ranks.include?(face_card)
-      included << face_card
-      hand_ranks.delete(face_card)
-      end
-    end
-    included.each{|included_face| hand_ranks << included_face}
-    lowest_card = hand_ranks.first
-    starting_point = deck_ranks.index(lowest_card)
-    straight = deck_ranks[starting_point, 5] 
-    hand_ranks == straight 
-  end
-=end

@@ -4,7 +4,7 @@ require_relative 'console'
 require 'pry'
 
 class PokerRound
-  attr_reader :pot, :table_positions, :big_blind
+  attr_reader :pot, :table_positions, :big_blind, :active_players
 
   NUM_OF_CARDS_IN_HAND = 5
 
