@@ -4,7 +4,7 @@ require_relative 'console'
 require 'pry'
 
 class PokerRound
-  attr_reader :pot, :table_positions, :big_blind, :active_players
+  attr_reader :pot, :table_positions, :big_blind, :active_players, :dealer
 
   NUM_OF_CARDS_IN_HAND = 5
 
@@ -19,7 +19,7 @@ class PokerRound
     @rules = rules
   end
 
-  def play_round
+  def play
     deal_hand_of_cards(@active_players)
     each_player_option_to_discard(@active_players)
     winning_hand = find_winning_hand(@active_players)
@@ -57,10 +57,11 @@ class PokerRound
         player.get_card_from_dealer(card)
       end
     end
+    players
   end
 
   def each_player_check_bet_fold active_players, current_bet
-    active_players.each{ |player| player.make_move(current_bet) }
+    active_players.each{ |player| player.make_betting_move(current_bet) }
   end
 
   def each_player_option_to_discard players
@@ -87,7 +88,7 @@ class PokerRound
   end
 
   def deal_more_cards_after_discard generic_player
-    while generic_player.hand_of_cards.count < NUM_OF_CARDS_IN_HAND
+    while generic_player.count_cards_in_hand < NUM_OF_CARDS_IN_HAND
       card = @dealer.deal_card
       generic_player.get_card_from_dealer(card)
     end

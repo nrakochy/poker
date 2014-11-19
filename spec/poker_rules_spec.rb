@@ -1,8 +1,6 @@
 require_relative '../lib/poker_rules'
 require_relative '../lib/deck'
 
-require 'pry'
-
 describe PokerRules do
   let(:poker_rules) { PokerRules.new }
   let(:deck) { Deck.new }

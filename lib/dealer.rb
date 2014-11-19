@@ -1,5 +1,5 @@
 require_relative 'deck'
-
+require 'pry'
 class Dealer
 
   attr_reader :current_deck
@@ -8,7 +8,7 @@ class Dealer
     @current_deck = current_deck
   end
 
-  def take_card_from_deck random_card
+  def remove_card_from_deck random_card
     @current_deck.delete(random_card)
   end
 
@@ -18,7 +18,7 @@ class Dealer
 
   def deal_card
     card = get_random_card_from_deck
-    take_card_from_deck(card)
+    remove_card_from_deck(card)
   end
 
 end

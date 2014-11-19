@@ -1,4 +1,3 @@
-require 'pry'
 require_relative 'deck'
 
 class PokerRules
@@ -22,7 +21,11 @@ class PokerRules
     @poker_hand_ranking.key(value_of_hand_of_cards)
   end
 
-  def determine_value_of_hand poker_hand
+  def return_index_of_card_in_the_deck card
+    @deck.find_index(card)
+  end
+
+  def determine_value_of_hand poker_hand = []
     full_deck = @deck
     return "High Card" if poker_hand.empty?
 

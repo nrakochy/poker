@@ -1,18 +1,28 @@
 require_relative 'poker_rules'
 
 class Player
-  attr_accessor :available_chips, :hand_of_cards, :position_at_the_table, :already_placed_bet, :poker_hand_ranking
+  attr_accessor :available_chips, :hand_of_cards, :position_at_the_table, :already_placed_bet, :poker_hand_ranking, :hand_value
 
-  def initialize available_chips = 0, position_at_the_table = 0, hand_of_cards = {}, rules = PokerRules.new
+  NUM_OF_CARDS_IN_HAND = 5
+
+  def initialize available_chips = 0, position_at_the_table = 0, hand_of_cards = [], hand_value = "High Card"
     @available_chips = available_chips
     @hand_of_cards = hand_of_cards
     @position_at_the_table = position_at_the_table
     @already_placed_bet = 0
-    #@poker_hand_value = rules.determine_value_of_hand(@hand_of_cards.values)
+    @hand_value = hand_value
   end
 
-  def discard card_num
-    @hand_of_cards.delete_at(card_num-1)
+  def discard(card_num)
+    @hand_of_cards.delete_at(card_num - 1)
+  end
+
+  def find_value_of_hand(current_hand)
+    @hand_value = PokerRules.new.determine_value_of_hand(current_hand)
+  end
+
+  def count_cards_in_hand
+    @hand_of_cards.count
   end
 
   def change_position_at_the_table num_at_the_table
@@ -25,6 +35,7 @@ class Player
 
   def get_card_from_dealer(card)
     @hand_of_cards << card
+    find_value_of_hand(@hand_of_cards) if count_cards_in_hand == NUM_OF_CARDS_IN_HAND
   end
 
   def reveal_hand
