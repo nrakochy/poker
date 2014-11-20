@@ -1,4 +1,5 @@
 require_relative 'game_io'
+require 'pry'
 
 class Console
   attr_reader :io
@@ -8,17 +9,18 @@ class Console
   end
 
   def welcome_to_five_card_draw
-    @io.print_output "Welcome to Five Card Draw Poker."
+    @io.print_output "\n--WELCOME TO FIVE CARD DRAW POKER--\n"
   end
 
-  def choose_yes_to_config_else_default_settings(players = [], minimum_amount_to_buy_in = 0, maximum_amount_to_buy_in = 0, big_blind = 0)
+  def choose_yes_to_config_else_default_settings(num_of_players = 2, minimum_amount_to_buy_in =100, maximum_amount_to_buy_in = 100, big_blind = 10)
     @io.print_output(
+      (welcome_to_five_card_draw).to_s +
       "Do you want to customize the game setup or just get to playing?\n" +
-      display_current_configuration(players, minimum_amount_to_buy_in, maximum_amount_to_buy_in, big_blind) +
+      (display_current_configuration(num_of_players, minimum_amount_to_buy_in, maximum_amount_to_buy_in, big_blind)).to_s +
       "Enter Y for customization. Enter anything else to start the game.")
   end
 
-  def display_current_configuration(num_of_players = 2, minimum_amount_to_buy_in = 0, maximum_amount_to_buy_in = 0, big_blind= 0)
+  def display_current_configuration(num_of_players = 2, minimum_amount_to_buy_in = 100, maximum_amount_to_buy_in = 100, big_blind= 10)
     @io.print_output(
      "Here is the current configuration:\n
         1. Number of players:          #{num_of_players}\n
@@ -28,7 +30,7 @@ class Console
   end
 
   def enter_zero_to_exit_configuration
-    @io.print_output("Enter 0 to exit configuration and start the game.")
+    @io.print_output("    Enter 0 at any time to exit configuration and start the game.")
   end
 
   def confirm_configuration_choice
@@ -38,7 +40,7 @@ class Console
   def request_which_part_of_the_game_to_config
     @io.print_output(
     "What would you like to change?\n
-    Enter 1-4 to choose a category to change.")
+    Enter 1-4 to choose a category from above to change.")
   end
 
   def how_many_players_in_the_game
@@ -99,7 +101,7 @@ class Console
     player_best_hand.join(" ") + "held by #{player}.")
   end
 
-  def user_input
+  def get_input
     @io.get_input
   end
 end

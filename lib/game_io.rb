@@ -6,7 +6,7 @@ class GameIO
   end
 
   def get_input
-    @input.gets
+    @input.gets.chomp
   end
 
   def print_output(output)

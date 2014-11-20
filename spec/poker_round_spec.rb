@@ -17,13 +17,6 @@ describe PokerRound do
   let(:poker_round_with_betting) { PokerRound.new(@setup.players_in_the_round, @dealer) }
   let(:poker_round) { PokerRound.new(@players, @dealer)}
 
-  describe '#add_bet_to_the_pot' do
-    it 'raises the amount of the pot by amount bet' do
-      poker_round.add_bet_to_the_pot(10)
-      expect(poker_round.pot).to eq( 25 )
-    end
-  end
-
   describe '#deal_hand_of_cards' do
     it 'reduces the Dealers deck by number of cards dealt' do
       poker_round.deal_hand_of_cards(poker_round.active_players)
@@ -35,5 +28,21 @@ describe PokerRound do
       expect(poker_round.active_players[0].hand_of_cards.count).to eq(5)
     end
   end
+
+  describe '#add_bet_to_the_pot' do
+    it 'raises the amount of the pot by amount bet' do
+      poker_round.add_bet_to_the_pot(10)
+      expect(poker_round.pot).to eq( 25 )
+    end
+  end
+
+  describe '#discard_from_player_into_discard_pile' do
+    it 'adds a card the discard pile attribute' do
+    end
+  end
+
+  describe 'remove_inactive_players_from_round' do
+  end
+
 
 end

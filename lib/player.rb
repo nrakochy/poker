@@ -47,8 +47,7 @@ class Player
   end
 
   def pay_blind blind_amount
-    blind = raise_bet(blind_amount)
-    @already_placed_bet += blind
+    raise_bet(blind_amount)
   end
 
   def call(current_bet)

@@ -43,27 +43,27 @@ describe PokerRoundSetup do
   end
 
   describe '#order_of_play' do
-    it 'returns an order of play for 4 players' do
-      expect(poker_round.define_order_of_play(poker_round.players_in_the_round)).to eq([4,1,2,3])
+    it 'assigns [4,1,2,3] for the order of play in a four-player game' do
+      poker_round.define_order_of_play(poker_round.players_in_the_round)
+      expect(poker_round.order_of_play).to eq([4,1,2,3])
     end
 
-    it 'returns an order of play for 3 players' do
-      expect(three_player_round.define_order_of_play(three_player_round.players_in_the_round)).to eq([3,1,2])
+    it 'returns an order of play [3,1,2] for 3 players' do
+      three_player_round.define_order_of_play(three_player_round.players_in_the_round)
+      expect(three_player_round.order_of_play).to eq([3,1,2])
     end
 
-    it 'returns an order of play for 2 players' do
-      expect(two_player_round.define_order_of_play(two_player_round.players_in_the_round)).to eq([2,1])
+    it 'returns an order of play [2,1] for 2 players' do
+      two_player_round.define_order_of_play(two_player_round.players_in_the_round)
+      expect(two_player_round.order_of_play).to eq([2,1])
     end
   end
 
   describe '#get_ante_from_big_and_small_blind' do
     it 'reduces Player.available_chips by blind amount' do
-      active_players = poker_round.get_ante_from_big_and_small_blind(poker_round.players_in_the_round)
+      poker_round.get_ante_from_big_and_small_blind(poker_round.players_in_the_round)
+      active_players = poker_round.players_in_the_round
       expect(active_players[1].available_chips).to eq( 95 )
-    end
-
-    it 'returns an array of Player objects' do
-      expect(poker_round.get_ante_from_big_and_small_blind(poker_round.players_in_the_round).class).to eq( Array )
     end
   end
 

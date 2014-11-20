@@ -1,14 +1,15 @@
 require_relative 'poker_round_setup'
 require_relative 'console'
-
-require 'pry'
+require_relative 'dealer'
 
 class PokerRound
-  attr_reader :pot, :table_positions, :big_blind, :active_players, :dealer
+  attr_reader :pot, :table_positions, :big_blind, :active_players, 
+    :dealer, :discard_pile
 
   NUM_OF_CARDS_IN_HAND = 5
 
-  def initialize(active_players, dealer, table_positions = [], pot = 15,  console = Console.new, rules = PokerRules.new)
+  def initialize(active_players, table_positions = [], pot = 15, 
+                 console = Console.new, rules = PokerRules.new, dealer = Dealer.new)
     @table_positions = table_positions
     @dealer = dealer
     @pot = pot
@@ -42,8 +43,8 @@ class PokerRound
     @pot += current_bet
   end
 
-  def add_card_to_discard_pile(card)
-    @discard_pile << card
+  def discard_from_player_into_discard_pile(generic_player,card)
+    @discard_pile << generic_player.discard(card)
   end
 
   def remove_inactive_players_from_round(players)
@@ -64,10 +65,13 @@ class PokerRound
     active_players.each{ |player| player.make_betting_move(current_bet) }
   end
 
-  def each_player_option_to_discard players
+  def each_player_option_to_discard_and_replace_from_dealer players
     players.each do |player|
-      allow_user_choice_to_discard
-      request_which_cards_to_discard_from_player_and_get_replacements_from_dealer(input, player) if input > 0
+      @console.hand_of_cards_summary
+      input = allow_user_choice_to_discard
+      if input > 0
+        request_which_cards_to_discard_from_player_and_get_replacements_from_dealer(input, player) 
+      end
       @console.hand_of_cards_summary
     end
   end
@@ -96,11 +100,11 @@ class PokerRound
 
   def request_which_cards_to_discard_from_player given_input, generic_player
     while given_input > 0
-      counter = 1
-      card_to_discard = @console.which_card_to_discard(counter)
-      @discard_pile << generic_player.discard(card_to_discard)
+      discard_counter = 1
+      card_to_discard = @console.which_card_to_discard(discard_counter)
+      discard_from_player_into_discard_pile(generic_player, card_to_discard)
       given_input -= 1
-      counter += 1
+      discard_counter += 1
       @console.discared_card_summary
     end
   end

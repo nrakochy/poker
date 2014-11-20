@@ -1,15 +1,14 @@
 require_relative 'player'
 require_relative 'poker_rules'
 require_relative 'console'
-require 'pry'
 
 class GameSetup
-  attr_reader :players, :player_count, :table_positions
+  attr_reader :players, :player_count, :table_positions, :big_blind
 
   YES = 'Y'
 
   def initialize(
-    player_count = 2, big_blind = 10, minimum_amount_to_buy_in = 100, 
+    player_count = 2, big_blind = 10, minimum_amount_to_buy_in = 100,
     table_positions = [], console = Console.new)
 
     @players = []
@@ -17,7 +16,6 @@ class GameSetup
     @big_blind = big_blind
     @minimum_buy_in = minimum_amount_to_buy_in
     @maximum_buy_in = minimum_amount_to_buy_in
-    @table_positions = table_positions
     @console = console
   end
 
@@ -28,7 +26,7 @@ class GameSetup
   def ready_for_game?
     ready_for_game = false
     player_choice = choose_yes_to_config_else_default_settings
-    ready_for_game = true if player_choice != YES
+    player_choice != YES ? ready_for_game = true : @console.confirm_configuration_choice
     while ready_for_game == false
       ready_for_game = choose_poker_game_config
     end
@@ -37,8 +35,12 @@ class GameSetup
 
   def setup_game
     create_players
-    seats_at_the_table
     self
+  end
+
+  def choose_yes_to_config_else_default_settings
+    @console.choose_yes_to_config_else_default_settings(@player_count)
+    @console.get_input.upcase
   end
 
   def create_players players = []
@@ -55,18 +57,13 @@ class GameSetup
     Player.new(initial_buy_in, table_position)
   end
 
-  def seats_at_the_table
-    @table_positions = (0..@player_count - 1).to_a
-  end
-
   def choose_poker_game_config
-    @console.confirm_config_choice
     exit_game_configuration_and_ready_for_game = false
     while exit_game_configuration_and_ready_for_game == false
-      @console.display_current_configuration
+      @console.display_current_configuration(@player_count, @minimum_buy_in, @maximum_buy_in, @big_blind)
       @console.request_which_part_of_the_game_to_config
       @console.enter_zero_to_exit_configuration
-      user_input = @console.user_input.to_i
+      user_input = @console.get_input.to_i
       if user_input == 0
         exit_game_configuration_and_ready_for_game = true
       else
@@ -77,14 +74,16 @@ class GameSetup
   end
 
   def change_one_of_game_config_options(given_input)
-    config_options = {
-      1 => get_number_of_players,
-      2 => set_minimum_amount_to_buy_in,
-      3 => cap_maximum_amount_of_buy_in,
-      4 => set_big_blind
-    }
-    config_options[given_input]
-    given_input
+    case given_input
+    when 1
+      get_number_of_players
+    when 2
+      set_minimum_amount_to_buy_in
+    when 3
+      cap_maximum_amount_of_buy_in
+    when 4
+      set_big_blind
+    end
   end
 
   def get_number_of_players
@@ -111,15 +110,10 @@ class GameSetup
     @big_blind = blind if valid_user_input?(blind)
   end
 
-  def choose_yes_to_config_else_default_settings
-    @console.choose_yes_to_config_else_default_settings(@players)
-    @console.get_input.upcase
-  end
-
   def valid_user_input? given_input
-    input_is_good = validate_user_input?(given_input)
+    input_is_good = validate_user_input?(given_input.to_i)
     counter = 0
-    while input_is_good = false || counter < 5
+    while input_is_good == false && counter < 5
       invalid_user_setup_input
       counter += 1
       new_input = @console.get_input
@@ -129,7 +123,7 @@ class GameSetup
   end
 
   def validate_user_input? input
-    input != 0
+    input > 0
   end
 
   def invalid_user_setup_input

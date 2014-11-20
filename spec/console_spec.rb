@@ -6,7 +6,7 @@ describe Console do
 
   describe "all console output methods" do
     it 'validates the first word of each output method' do
-      expect(console.welcome_to_five_card_draw.first).to eq("Welcome")
+      expect(console.welcome_to_five_card_draw.first).to eq("--WELCOME")
       expect(console.display_current_configuration.first).to eq("Here")
       expect(console.set_big_blind.first).to eq("What")
       expect(console.enter_zero_to_exit_configuration.first).to eq("Enter")
@@ -25,7 +25,7 @@ describe Console do
     end
     
     it 'validates the last word of each output method' do
-      expect(console.welcome_to_five_card_draw.last).to eq("Poker.")
+      expect(console.welcome_to_five_card_draw.last).to eq("POKER--")
       expect(console.display_current_configuration(2,0,0, 100).last).to eq("100")
       expect(console.set_big_blind.last).to eq("round?")
       expect(console.enter_zero_to_exit_configuration.last).to eq("game.")
