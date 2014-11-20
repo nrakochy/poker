@@ -70,9 +70,7 @@ class Console
 
   def option_to_discard
     @io.print_output(
-      "Please enter how many cards you want to discard from your hand.\n
-          You can choose up to 3 cards to discard.\n
-          Enter anything other than 1-3 to keep your hand as-is.")
+      "\nPlease enter how many cards you want to discard from your hand.\nYou can choose up to 3 cards to discard.\n")
   end
 
   def which_card_to_discard card_counter
@@ -80,19 +78,34 @@ class Console
       "For card ##{card_counter}, which card do you want to discard?")
   end
 
-  def discarded_card_summary(card)
-    @io.print_output("Okay. You discarded #{card}.")
+  def discarded_card_summary(card_display)
+    @io.print_output("Okay. You discarded #{card_display}.")
   end
 
-  def hand_of_cards_summary(hand_of_cards)
-    @io.print_output(
-      "Your current hand of cards: " +
-      hand_of_cards.join(" "))
+  def hand_of_cards_summary(cards_to_display)
+   @io.print_output("Here is your hand of cards:\n").to_s +
+   display_cards(cards_to_display).to_s
+  end
+
+  def display_cards(cards_to_display)
+    cards_to_display.each_pair do |card_num, card_visual|
+      @io.print_output(
+      "Card ##{card_num} is #{card_visual}").to_s
+    end
+  end
+
+
+  def best_hand_summary(best_hand)
+    @io.print_output("\nRight now, your best hand is the #{best_hand}")
+  end
+
+  def confirm_discard_and_new_cards_added
+    @io.print_output("Okay. Here we go. This is what your hand is going to be.")
   end
 
   def invalid_card_to_discard_choice
     @io.print_output(
-      "Oops. Looks like you entered a wrong value. 
+      "Oops. Looks like you entered a wrong value.
       You need to enter a number 0-3.")
   end
 

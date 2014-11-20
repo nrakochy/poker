@@ -1,14 +1,15 @@
 require_relative 'poker_round_setup'
 require_relative 'console'
 require_relative 'dealer'
+require 'pry'
 
 class PokerRound
-  attr_reader :pot, :table_positions, :big_blind, :active_players, 
+  attr_reader :pot, :table_positions, :big_blind, :active_players,
     :dealer, :discard_pile
 
   NUM_OF_CARDS_IN_HAND = 5
 
-  def initialize(active_players, table_positions = [], pot = 15, 
+  def initialize(active_players, table_positions = [], pot = 15,
                  console = Console.new, rules = PokerRules.new, dealer = Dealer.new)
     @table_positions = table_positions
     @dealer = dealer
@@ -22,7 +23,7 @@ class PokerRound
 
   def play
     deal_hand_of_cards(@active_players)
-    each_player_option_to_discard(@active_players)
+    each_player_option_to_discard_and_replace_from_dealer(@active_players)
     winning_hand = find_winning_hand(@active_players)
     @console.winner_announcement(
       winning_hand[player],
@@ -67,13 +68,29 @@ class PokerRound
 
   def each_player_option_to_discard_and_replace_from_dealer players
     players.each do |player|
-      @console.hand_of_cards_summary
+      display_cards = make_cards_display(player.hand_of_cards)
+      @console.hand_of_cards_summary(display_cards)
+      @console.best_hand_summary(player.find_value_of_hand(player.hand_of_cards))
       input = allow_user_choice_to_discard
       if input > 0
-        request_which_cards_to_discard_from_player_and_get_replacements_from_dealer(input, player) 
+        request_which_cards_to_discard_from_player_and_get_replacements_from_dealer(input, player, display_cards) 
       end
-      @console.hand_of_cards_summary
+      display_cards = make_cards_display(player.hand_of_cards)
+      @console.confirm_discard_and_new_cards_added
+      @console.hand_of_cards_summary(display_cards)
+      @console.best_hand_summary(player.find_value_of_hand(player.hand_of_cards))
+
     end
+  end
+  
+  def make_cards_display hand_of_cards
+    display = {}
+    card_num = 1
+    hand_of_cards.each do |card|
+      display[card_num] = card.show_display
+      card_num += 1
+    end
+    display
   end
 
   def valid_user_choice? given_input
@@ -85,7 +102,7 @@ class PokerRound
     input = nil
     while valid_user_choice == false
       @console.option_to_discard
-      input = @console.user_input.to_i
+      input = @console.get_input.to_i
       valid_user_choice?(input) ? valid_user_choice = true : @console.invalid_input
     end
     input
@@ -98,19 +115,22 @@ class PokerRound
     end
   end
 
-  def request_which_cards_to_discard_from_player given_input, generic_player
+  def request_which_cards_to_discard_from_player given_input, generic_player, numbered_cards
+    discard_counter = 1
     while given_input > 0
-      discard_counter = 1
-      card_to_discard = @console.which_card_to_discard(discard_counter)
+      @console.which_card_to_discard(discard_counter)
+      card_num_to_discard = @console.get_input.to_i
+      discard_card_display_symbol = numbered_cards[card_num_to_discard]
+      card_to_discard = generic_player.find_card_in_hand(discard_card_display_symbol)
       discard_from_player_into_discard_pile(generic_player, card_to_discard)
       given_input -= 1
       discard_counter += 1
-      @console.discared_card_summary
+      @console.discarded_card_summary(discard_card_display_symbol)
     end
   end
 
-  def request_which_cards_to_discard_from_player_and_get_replacements_from_dealer given_input, generic_player
-    request_which_cards_to_discard_from_player(given_input, generic_player)
+  def request_which_cards_to_discard_from_player_and_get_replacements_from_dealer given_input, generic_player, numbered_cards
+    request_which_cards_to_discard_from_player(given_input, generic_player, numbered_cards)
     deal_more_cards_after_discard(generic_player)
   end
 

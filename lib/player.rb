@@ -13,8 +13,8 @@ class Player
     @hand_value = hand_value
   end
 
-  def discard(card_num)
-    @hand_of_cards.delete_at(card_num - 1)
+  def discard(card)
+    @hand_of_cards.delete(card)
   end
 
   def find_value_of_hand(current_hand)
@@ -23,6 +23,10 @@ class Player
 
   def count_cards_in_hand
     @hand_of_cards.count
+  end
+
+  def find_card_in_hand display
+    @hand_of_cards.find{|card| display == card.display }
   end
 
   def change_position_at_the_table num_at_the_table

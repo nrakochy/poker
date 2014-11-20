@@ -19,8 +19,8 @@ class Game
   end
 
   def play_round round_setup
-    poker_round = 
-      PokerRound.new(round_setup.players_in_the_round, round_setup.table_positions, 
+    poker_round =
+      PokerRound.new(round_setup.players_in_the_round, round_setup.table_positions,
                      round_setup.opening_pot)
     poker_round.play
   end
