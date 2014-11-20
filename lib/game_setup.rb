@@ -1,11 +1,17 @@
 require_relative 'player'
 require_relative 'poker_rules'
 require_relative 'console'
+require 'pry'
 
 class GameSetup
+  attr_reader :players, :player_count, :table_positions
+
   YES = 'Y'
 
-  def initialize player_count = 2, minimum_amount_to_buy_in = 100, big_blind = 10, table_positions = [1,2], console = Console.new
+  def initialize(
+    player_count = 2, big_blind = 10, minimum_amount_to_buy_in = 100, 
+    table_positions = [], console = Console.new)
+
     @players = []
     @player_count = player_count
     @big_blind = big_blind
@@ -15,14 +21,34 @@ class GameSetup
     @console = console
   end
 
+  def set_the_configuration
+    setup_game if ready_for_game?
+  end
+
+  def ready_for_game?
+    ready_for_game = false
+    player_choice = choose_yes_to_config_else_default_settings
+    ready_for_game = true if player_choice != YES
+    while ready_for_game == false
+      ready_for_game = choose_poker_game_config
+    end
+    ready_for_game
+  end
+
+  def setup_game
+    create_players
+    seats_at_the_table
+    self
+  end
+
   def create_players players = []
-    num_of_players = @players.count
-    num_of_players.times do |player|
-      seat_counter = 0
+    seat_counter = 0
+    @player_count.times do |create_player|
       players << create_single_player(@minimum_buy_in, seat_counter)
       seat_counter += 1
     end
-    @active_players = players
+    @player_count = players.count
+    @players = players
   end
 
   def create_single_player initial_buy_in, table_position
@@ -30,7 +56,7 @@ class GameSetup
   end
 
   def seats_at_the_table
-    @table_positions = (0..@players.count).to_a
+    @table_positions = (0..@player_count - 1).to_a
   end
 
   def choose_poker_game_config
@@ -109,26 +135,5 @@ class GameSetup
   def invalid_user_setup_input
     @console.invalid_user_setup_input
   end
-
-  def option_to_configure
-    ready_for_game = false
-    player_choice = choose_yes_to_config_else_default_settings
-    ready_for_game = true if player_choice != YES
-    while ready_for_game == false
-      ready_for_game = choose_poker_game_config
-    end
-    setup_game
-  end
-
-  def setup_game
-    create_players
-    seats_at_the_table
-    self
-  end
-
-  def set_the_configuration
-    option_to_configure
-  end
-
 
 end

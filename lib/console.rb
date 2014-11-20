@@ -85,7 +85,7 @@ class Console
   def hand_of_cards_summary(hand_of_cards)
     @io.print_output(
       "Your current hand of cards: " +
-      hand_of_cards.each{|card| card } )
+      hand_of_cards.join(" "))
   end
 
   def invalid_card_to_discard_choice
@@ -95,8 +95,8 @@ class Console
   end
 
   def winner_announcement player = 0, player_best_hand = []
-    @io.print_output("Looks like we have a winner. 
-    The winning hand is #{player_best_hand}, held by #{player}.")
+    @io.print_output("Looks like we have a winner. The winning hand is " +
+    player_best_hand.join(" ") + "held by #{player}.")
   end
 
   def user_input
