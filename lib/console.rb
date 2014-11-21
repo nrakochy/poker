@@ -88,7 +88,7 @@ class Console
   end
 
   def display_cards(cards_to_display)
-    cards_to_display.each_pair do |card_num, card_visual|
+    cards_to_display.each do |card_num, card_visual|
       @io.print_output(
       "Card ##{card_num} is #{card_visual}").to_s
     end
@@ -109,9 +109,9 @@ class Console
       You need to enter a number 0-3.")
   end
 
-  def winner_announcement player = 0, player_best_hand = []
+  def winner_announcement player = 0, cards_to_display
     @io.print_output("Looks like we have a winner. The winning hand is " +
-    player_best_hand.join(" ") + "held by #{player}.")
+    display_cards(cards_to_display).to_s + "held by player##{player}.")
   end
 
   def get_input

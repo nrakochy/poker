@@ -24,20 +24,24 @@ class PokerRound
   def play
     deal_hand_of_cards(@active_players)
     each_player_option_to_discard_and_replace_from_dealer(@active_players)
-    winning_hand = find_winning_hand(@active_players)
+    winning_player = find_winning_hand(@active_players)
     @console.winner_announcement(
-      winning_hand[player],
-      winning_hand.key(player)
-    )
+    winning_player.get_player_number, winning_player.find_hand_of_cards)
+    winning_player.get_pot_from_the_table_for_winning_hand(@pot)
+    reset_all_placed_bets_at_end_of_round(@active_players)
+    binding.pry
   end
 
   def find_winning_hand(players)
-   winning_hand = {}
+   player_with_winning_hand = {}
     players.each do |player|
-      rank = @rules.find_rank_of_poker_hand(player.poker_hand_value)
-      winning_hand[player] = player.poker_hand_value if rank > winning_hand[player]
+      hand_rank_acc_to_poker_rules = @rules.find_rank_of_poker_hand(player.hand_value)
+      if player_with_winning_hand.empty? || hand_rank_acc_to_poker_rules < player_with_winning_hand.values.first
+        player_with_winning_hand = {}
+        player_with_winning_hand[player] = hand_rank_acc_to_poker_rules
+      end
     end
-    winning_hand
+    player_with_winning_hand.keys.first
   end
 
   def add_bet_to_the_pot(current_bet)
@@ -79,10 +83,9 @@ class PokerRound
       @console.confirm_discard_and_new_cards_added
       @console.hand_of_cards_summary(display_cards)
       @console.best_hand_summary(player.find_value_of_hand(player.hand_of_cards))
-
     end
   end
-  
+
   def make_cards_display hand_of_cards
     display = {}
     card_num = 1
@@ -132,6 +135,10 @@ class PokerRound
   def request_which_cards_to_discard_from_player_and_get_replacements_from_dealer given_input, generic_player, numbered_cards
     request_which_cards_to_discard_from_player(given_input, generic_player, numbered_cards)
     deal_more_cards_after_discard(generic_player)
+  end
+
+  def reset_all_placed_bets_at_end_of_round(players)
+    players.each{ |player| player.reset_already_placed_bet_at_end_of_the_round }
   end
 
 end

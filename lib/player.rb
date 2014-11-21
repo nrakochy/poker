@@ -1,16 +1,17 @@
 require_relative 'poker_rules'
 
 class Player
-  attr_accessor :available_chips, :hand_of_cards, :position_at_the_table, :already_placed_bet, :poker_hand_ranking, :hand_value
+  attr_accessor :available_chips, :hand_of_cards, :position_at_the_table, :already_placed_bet, :poker_hand_ranking, :hand_value, :player_num
 
   NUM_OF_CARDS_IN_HAND = 5
 
-  def initialize available_chips = 0, position_at_the_table = 0, hand_of_cards = [], hand_value = "High Card"
+  def initialize available_chips = 0, position_at_the_table = 0, player_num = 0, hand_of_cards = [], hand_value = "High Card"
     @available_chips = available_chips
     @hand_of_cards = hand_of_cards
     @position_at_the_table = position_at_the_table
     @already_placed_bet = 0
     @hand_value = hand_value
+    @player_num = player_num
   end
 
   def discard(card)
@@ -23,6 +24,10 @@ class Player
 
   def count_cards_in_hand
     @hand_of_cards.count
+  end
+
+  def find_hand_of_cards
+    @hand_of_cards
   end
 
   def find_card_in_hand display
@@ -76,8 +81,16 @@ class Player
     @hand_of_cards = []
   end
 
-  def reset_already_placed_bet_at_end_of_betting
+  def get_player_number
+    @player_num
+  end
+
+  def reset_already_placed_bet_at_end_of_the_round
     @already_placed_bet = 0
+  end
+
+  def get_pot_from_the_table_for_winning_hand pot
+    @available_chips += pot
   end
 
 end

@@ -46,15 +46,15 @@ class GameSetup
   def create_players players = []
     seat_counter = 0
     @player_count.times do |create_player|
-      players << create_single_player(@minimum_buy_in, seat_counter)
+      players << create_single_player(@minimum_buy_in, seat_counter, seat_counter + 1)
       seat_counter += 1
     end
     @player_count = players.count
     @players = players
   end
 
-  def create_single_player initial_buy_in, table_position
-    Player.new(initial_buy_in, table_position)
+  def create_single_player initial_buy_in, table_position, player_number = 0
+    Player.new(initial_buy_in, table_position, player_number)
   end
 
   def choose_poker_game_config

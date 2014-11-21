@@ -3,7 +3,8 @@ require_relative '../lib/deck'
 require 'pry'
 
 describe Player do
-  let(:player){ Player.new(100, 1, @hand_of_cards) }
+
+  let(:player){ Player.new(100, 1, 1, @hand_of_cards) }
 
   before :each do
     deck = Deck.new
@@ -17,7 +18,7 @@ describe Player do
   describe '#discard' do
     it 'removes a card and returns the remaining cards in the poker hand' do
       spades2 = @hand_of_cards[4]
-      expect(player.discard(5)).to eq(spades2)
+      expect(player.discard(spades2)).to eq(spades2)
     end
   end
 
@@ -30,7 +31,8 @@ describe Player do
 
     it 'updates the hand_value attribute when the player gets a card from the dealer and has 5 cards in hand ' do
       clubs2 = Deck.new.find_card_in_deck("2", "Clubs")
-      player.discard(1)
+      ace_hearts = @hand_of_cards[0]
+      player.discard(ace_hearts)
       player.get_card_from_dealer(clubs2)
       expect(player.hand_value).to eq("Full House")
     end
