@@ -99,8 +99,10 @@ class Console
     @io.print_output("\nRight now, your best hand is the #{best_hand}")
   end
 
+  CONFIRM_DISCARD_AND_NEW_CARDS = "Okay. Here we go. This is what your hand is going to be."
+
   def confirm_discard_and_new_cards_added
-    @io.print_output("Okay. Here we go. This is what your hand is going to be.")
+    @io.print_output(CONFIRM_DISCARD_AND_NEW_CARDS)
   end
 
   def invalid_card_to_discard_choice

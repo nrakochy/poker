@@ -29,7 +29,6 @@ class PokerRound
     winning_player.get_player_number, winning_player.find_hand_of_cards)
     winning_player.get_pot_from_the_table_for_winning_hand(@pot)
     reset_all_placed_bets_at_end_of_round(@active_players)
-    binding.pry
   end
 
   def find_winning_hand(players)
